@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tadua.controller.HomeController">
+   <children>
+      <Button fx:id="sahamHarian" layoutX="94.0" layoutY="204.0" mnemonicParsing="false" onAction="#btnsahamHarian" text="Prediksi Saham Harian" />
+      <Button fx:id="sahamBulanan" layoutX="304.0" layoutY="204.0" mnemonicParsing="false" onAction="#btnsahamBulanan" text="Prediksi Saham Bulanan" />
+      <Label layoutX="203.0" layoutY="157.0" styleClass="label-subheader" stylesheets="@harry/css/dark-theme.css" text="Silahkan Pilih Prediksi Saham" textAlignment="CENTER" />
+      <Button fx:id="exitButton" layoutX="265.0" layoutY="346.0" mnemonicParsing="false" onAction="#btnExit" text="Exit" />
+      <Label layoutX="66.0" layoutY="56.0" styleClass="label-headerHome" stylesheets="@css/dark-theme.css" text="Prediksi Saham Gabungan" />
+   </children>
+   <stylesheets>
+      <URL value="@css/dark-theme.css" />
+      <URL value="@harry/css/dark-theme.css" />
+   </stylesheets>
+</AnchorPane>
