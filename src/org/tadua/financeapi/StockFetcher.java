@@ -26,7 +26,7 @@ public class StockFetcher {
 	* @return 	a stock object containing info about the company's stock
 	* @see Stock
         * Editable from https://github.com/natehefner/yahoostocks-java
-     */
+     */    
     public static Stock getStock(String symbol) {
         String sym = symbol.toUpperCase();
         double price = 0.0;

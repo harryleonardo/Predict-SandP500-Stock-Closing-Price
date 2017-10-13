@@ -115,6 +115,20 @@ public class HandleErrorController {
     String predict500Value = "D:\\Kuliah\\Semester VI\\TAII\\predict500Daily.csv";
     String predict2500Value = "D:\\Kuliah\\Semester VI\\TAII\\predict2500Daily.csv";
     
+    //    Path to Save Output of the Training
+    String save10Value = "D:\\Kuliah\\Semester VI\\TAII\\save10Value.csv";
+    String save50Value = "D:\\Kuliah\\Semester VI\\TAII\\save50Value.csv";
+    String save100Value = "D:\\Kuliah\\Semester VI\\TAII\\save100Value.csv";
+    String save500Value = "D:\\Kuliah\\Semester VI\\TAII\\save500Value.csv";
+    String save2500Value = "D:\\Kuliah\\Semester VI\\TAII\\save2500Value.csv";
+    
+//    Path to Save Output of the Testing
+    String save10ValueTesting = "D:\\Kuliah\\Semester VI\\TAII\\save10ValueTesting.csv";
+    String save50ValueTesting = "D:\\Kuliah\\Semester VI\\TAII\\save50ValueTesting.csv";
+    String save100ValueTesting = "D:\\Kuliah\\Semester VI\\TAII\\save100ValueTesting.csv";
+    String save500ValueTesting = "D:\\Kuliah\\Semester VI\\TAII\\save500ValueTesting.csv";
+    String save2500ValueTesting = "D:\\Kuliah\\Semester VI\\TAII\\save2500ValueTesting.csv";
+    
     //Delimiter used in CSV file
     private final String COMMA_DELIMITER = ",";
     private final String NEW_LINE_SEPARATOR = "\n";
@@ -132,8 +146,11 @@ public class HandleErrorController {
 //    CSV file to save Predict value 
     private static final String FILE_PREDICT = "id,prediction";
     
+//    CSV file to save output Value
+    private static final String FILE_SAVE = "date,prediksi,aktual,error";
     
-    
+//  CSV file to save output Value Testing
+    private static final String FILE_SAVE_OUTPUT = "date,prediksi,aktual,error";
 
 //        Prepare Convert data into CSV file
     FileWriter fileWriterTraining;
@@ -144,6 +161,12 @@ public class HandleErrorController {
     
 //    FileWriter for predict
     FileWriter fileWriterPredict;
+    
+//    FileWriter for Saving Output
+    FileWriter fileWriterSave;
+
+//    FileWriter for Saving Output
+    FileWriter fileWriterSaveOutput;    
     /*
         In this part, the training or testing data error of daily scenario will be counted and store it 
         into CSV file.
@@ -155,18 +178,23 @@ public class HandleErrorController {
         if (dataset == 10) {
             fileWriterMAPEdata = new FileWriter(mapeTraining10DataDaily);
             fileWriterTraining = new FileWriter(errortraining10DataDaily);
+            fileWriterSave = new FileWriter(save10Value);
         } else if (dataset == 50) {
             fileWriterMAPEdata = new FileWriter(mapeTraining50DataDaily);
             fileWriterTraining = new FileWriter(errortraining50DataDaily);
+            fileWriterSave = new FileWriter(save50Value);
         } else if (dataset == 100) {
             fileWriterMAPEdata = new FileWriter(mapeTraining100DataDaily);
             fileWriterTraining = new FileWriter(errortraining100DataDaily);
+            fileWriterSave = new FileWriter(save100Value);
         } else if (dataset == 500) {
             fileWriterMAPEdata = new FileWriter(mapeTraining500DataDaily);
             fileWriterTraining = new FileWriter(errortraining500DataDaily);
+            fileWriterSave = new FileWriter(save500Value);
         } else if (dataset == 2500) {
             fileWriterMAPEdata = new FileWriter(mapeTraining2500DataDaily);
             fileWriterTraining = new FileWriter(errortraining2500DataDaily);
+            fileWriterSave = new FileWriter(save2500Value);
         }
 
         //Write the Training CSV file header
@@ -178,6 +206,12 @@ public class HandleErrorController {
         fileWriterMAPEdata.append(FILE_MAPE);
         //Add a new line separator after the header
         fileWriterMAPEdata.append(NEW_LINE_SEPARATOR_MAPE);
+        
+        //Write the Save Output file header
+        fileWriterSave.append(FILE_SAVE);
+        //Add a new line separator after the header
+        fileWriterSave.append(NEW_LINE_SEPARATOR);
+        
         
         for (int x = 0; x < totalData; ++x) {
             id++;
@@ -191,8 +225,17 @@ public class HandleErrorController {
             }
 
             totalError += percentageError;
-//            System.out.println("Date : "+dates.get(x)+" ,Hasil Training : " + trainingModel + " , Target : " + targetTrainingModel+ " ,Error : "+percentageError);
+            System.out.println("Date : "+dates.get(x)+" ,Prediksi : " + trainingModel + " , Aktual : " + targetTrainingModel+ " ,Error : "+percentageError);
 //            System.out.println("\nPercentage Error 2500 Data Training : " + percentageError);
+            fileWriterSave.append(String.valueOf(dates.get(x)));
+            fileWriterSave.append(COMMA_DELIMITER);
+            fileWriterSave.append(String.valueOf(trainingModel));
+            fileWriterSave.append(COMMA_DELIMITER);
+            fileWriterSave.append(String.valueOf(targetTrainingModel));
+            fileWriterSave.append(COMMA_DELIMITER);
+            fileWriterSave.append(String.valueOf(percentageError));
+            fileWriterSave.append(NEW_LINE_SEPARATOR);
+
             //                For Column ID
             fileWriterTraining.append(String.valueOf(id));
             fileWriterTraining.append(COMMA_DELIMITER);
@@ -202,7 +245,7 @@ public class HandleErrorController {
 
         MAPE = totalError / totalData;
         percentage = 100 - MAPE;
-//        System.out.println("Total Error : "+totalError+"\n");
+        System.out.println("Total Error : "+totalError+"\n");
         
         fileWriterMAPEdata.append(String.valueOf(1));
         fileWriterMAPEdata.append(COMMA_DELIMITER);
@@ -214,6 +257,9 @@ public class HandleErrorController {
         fileWriterMAPEdata.close();
         fileWriterTraining.flush();
         fileWriterTraining.close();
+        fileWriterSave.flush();
+        fileWriterSave.close();
+        
     }
 
     public void mapeDataTestingDaily(double[] predictData, List<Double> target, int dataset) throws SQLException, IOException {
@@ -224,22 +270,27 @@ public class HandleErrorController {
             fileWriterMAPEdata = new FileWriter(mapeTesting10DataDaily);
             fileWriterTesting = new FileWriter(errortesting10DataDaily);
             fileWriterPredict = new FileWriter(predict10Value);
+            fileWriterSaveOutput = new FileWriter(save10ValueTesting);
         } else if (dataset == 50) {
             fileWriterMAPEdata = new FileWriter(mapeTesting50DataDaily);
             fileWriterTesting = new FileWriter(errortesting50DataDaily);
             fileWriterPredict = new FileWriter(predict50Value);
+            fileWriterSaveOutput = new FileWriter(save50ValueTesting);
         } else if (dataset == 100) {
             fileWriterMAPEdata = new FileWriter(mapeTesting100DataDaily);
             fileWriterTesting = new FileWriter(errortesting100DataDaily);
             fileWriterPredict = new FileWriter(predict100Value);
+            fileWriterSaveOutput = new FileWriter(save100ValueTesting);
         } else if (dataset == 500) {
             fileWriterMAPEdata = new FileWriter(mapeTesting500DataDaily);
             fileWriterTesting = new FileWriter(errortesting500DataDaily);
             fileWriterPredict = new FileWriter(predict500Value);
+            fileWriterSaveOutput = new FileWriter(save500ValueTesting);
         } else if (dataset == 2500) {
             fileWriterMAPEdata = new FileWriter(mapeTesting2500DataDaily);
             fileWriterTesting = new FileWriter(errortesting2500DataDaily);
             fileWriterPredict = new FileWriter(predict2500Value);
+            fileWriterSaveOutput = new FileWriter(save2500ValueTesting);
         }
 
         //Write the Training CSV file header
@@ -255,6 +306,11 @@ public class HandleErrorController {
 //        Write the Predict value into CSV
         fileWriterPredict.append(FILE_PREDICT);
         fileWriterPredict.append(NEW_LINE_SEPARATOR);
+        
+        
+//        Write the Output value into CSV
+        fileWriterSaveOutput.append(FILE_SAVE_OUTPUT);
+        fileWriterSaveOutput.append(NEW_LINE_SEPARATOR);
         
         for (int x = 0; x < target.size(); x++) {
             id++;
@@ -275,7 +331,17 @@ public class HandleErrorController {
 
                 totalError += percentageError;
 
-//                System.out.println("Date : "+dates.get(x)+" ,Hasil Training : " + targetTesting + " , Target : " + targetTesting+ " ,Error : "+percentageError);
+                System.out.println("Date : "+dates.get(x)+" ,Prediksi : " + prediksi + " , Aktual : " + targetTesting+ " ,Error : "+percentageError);
+
+//                Write into CSV File
+                fileWriterSaveOutput.append(String.valueOf(dates.get(x)));
+                fileWriterSaveOutput.append(COMMA_DELIMITER);
+                fileWriterSaveOutput.append(String.valueOf(prediksi));
+                fileWriterSaveOutput.append(COMMA_DELIMITER);
+                fileWriterSaveOutput.append(String.valueOf(targetTesting));
+                fileWriterSaveOutput.append(COMMA_DELIMITER);
+                fileWriterSaveOutput.append(String.valueOf(percentageError));
+                fileWriterSaveOutput.append(NEW_LINE_SEPARATOR);
                 
 //                For Column ID
                 fileWriterTesting.append(String.valueOf(id));
@@ -299,7 +365,7 @@ public class HandleErrorController {
         
         percentage = 100 - MAPE;
         System.out.println("\nMAPE dari Keseluruhan Data Testing " + dataset + " Data adalah : " + MAPE + " , Dengan Akurasi : " +percentage+" %");
-        System.out.println("Nilai Prediksi " + dataset + " Data : " + nilaiPrediksi);
+        System.out.println("Nilai Prediksi dari " + dataset + " Data : " + nilaiPrediksi);
         
         fileWriterPredict.append(String.valueOf(1));
         fileWriterPredict.append(COMMA_DELIMITER);
@@ -312,6 +378,8 @@ public class HandleErrorController {
         fileWriterMAPEdata.close();
         fileWriterPredict.flush();
         fileWriterPredict.close();
+        fileWriterSaveOutput.flush();
+        fileWriterSaveOutput.close();
     }
 
     /*
@@ -320,7 +388,7 @@ public class HandleErrorController {
      */
     public void mapeDataTrainingMonthly(List<Double> outputTraining, List<Double> targetTraining, int dataset) throws SQLException, IOException {
         int totalData = outputTraining.size(), id = 0;
-        double trainingModel, targetTrainingModel, percentageError, MAPE, totalError = 0, percentage = 0;
+        double trainingModel, targetTrainingModel, percentageError, MAPE, totalError = 0, percentage = 0,error=0;
         if (dataset == 10) {
             fileWriterMAPEdata = new FileWriter(mapeTraining10Monthly);
             fileWriterTraining = new FileWriter(errortraining10DataMonthly);
@@ -354,9 +422,10 @@ public class HandleErrorController {
             }
 
             totalError += percentageError;
-//            System.out.println("Data Output : " + trainingModel + " , Target : " + targetTrainingModel);
+            error = trainingModel-targetTrainingModel;
+            System.out.println("Prediksi : " + trainingModel + " , Target : " + targetTrainingModel+", Error : "+error);
 //            System.out.println("\nPercentage Error : " + percentageError);
-
+//            System.out.println("Hasil Training : " + trainingModel + " , Target : " + targetTrainingModel+ " ,Error : "+percentageError);
             //Write a normalization output into CSV File
 //                For Column ID
             fileWriterTraining.append(String.valueOf(id));
@@ -367,7 +436,7 @@ public class HandleErrorController {
 
         MAPE = totalError / totalData;
         percentage = 100 - MAPE;
-//        System.out.println("Total Error : "+totalError);
+        System.out.println("Total Error : "+totalError);
 //        System.out.println("Total Data : "+totalData);
         fileWriterMAPEdata.append(String.valueOf(1));
         fileWriterMAPEdata.append(COMMA_DELIMITER);
@@ -455,140 +524,140 @@ public class HandleErrorController {
         fileWriterMAPEdata.close();
     }
     
-    public void mapeDataTrainingMonthlySecond(List<Double> outputTraining, List<Double> targetTraining, int dataset) throws SQLException, IOException {
-        int totalData = outputTraining.size(), id = 0;
-        double trainingModel, targetTrainingModel, percentageError, MAPE, totalError = 0, percentage = 0;
-        if (dataset == 10) {
-            fileWriterMAPEdata = new FileWriter(mapeTraining10MonthlySecond);
-            fileWriterTraining = new FileWriter(errortraining10DataMonthlySecond);
-        } else if (dataset == 50) {
-            fileWriterMAPEdata = new FileWriter(mapeTraining50MonthlySecond);
-            fileWriterTraining = new FileWriter(errortraining50DataMonthlySecond);
-        } else if (dataset == 120) {
-            fileWriterMAPEdata = new FileWriter(mapeTraining120MonthlySecond);
-            fileWriterTraining = new FileWriter(errortraining120DataMonthlySecond);
-        }
-
-        //Write the Training CSV file header
-        fileWriterTraining.append(FILE_HEADER);
-        //Add a new line separator after the header
-        fileWriterTraining.append(NEW_LINE_SEPARATOR);
-        
-        //Write the Training CSV file header
-        fileWriterMAPEdata.append(FILE_MAPE);
-        //Add a new line separator after the header
-        fileWriterMAPEdata.append(NEW_LINE_SEPARATOR_MAPE);
-        
-        for (int x = 0; x < totalData; ++x) {
-            id++;
-            trainingModel = sc.denormalizationDailyInput(dataset, outputTraining.get(x));
-            targetTrainingModel = targetTraining.get(x);
-            percentageError = ((targetTrainingModel - trainingModel) / targetTrainingModel) * 100;
-
-//                Absolute Value
-            if (percentageError < 0) {
-                percentageError *= -1;
-            }
-
-            totalError += percentageError;
-//            System.out.println("Data Output : " + trainingModel + " , Target : " + targetTrainingModel);
-//            System.out.println("\nPercentage Error : " + percentageError);
-
-            //Write a normalization output into CSV File
-//                For Column ID
-            fileWriterTraining.append(String.valueOf(id));
-            fileWriterTraining.append(COMMA_DELIMITER);
-            fileWriterTraining.append(String.valueOf(percentageError));
-            fileWriterTraining.append(NEW_LINE_SEPARATOR);
-        }
-
-        MAPE = totalError / totalData;
-        percentage = 100 - MAPE;
-//        System.out.println("Total Error : "+totalError);
-//        System.out.println("Total Data : "+totalData);
-        fileWriterMAPEdata.append(String.valueOf(1));
-        fileWriterMAPEdata.append(COMMA_DELIMITER);
-        fileWriterMAPEdata.append(String.valueOf(MAPE));
-        fileWriterMAPEdata.append(NEW_LINE_SEPARATOR);
-        System.out.println("\nNilai MAPE dari Keseluruhan Data Training " + dataset + " Data : " + MAPE + ", Dengan Akurasi : "+percentage+" %");
-        
-        fileWriterMAPEdata.flush();
-        fileWriterMAPEdata.close();
-        fileWriterTraining.flush();
-        fileWriterTraining.close();
-    }
-    
-    public void mapeDataTestingMonthlySecond(double[] dataPredict, List<Double> target, int dataset) throws SQLException, IOException {
-        int totalData = 0, id = 0;
-        if (dataset == 10) {
-            fileWriterMAPEdata = new FileWriter(mapeTesting10Monthly);
-            fileWriterTesting = new FileWriter(errortesting10DataMonthly);
-        } else if (dataset == 50) {
-            fileWriterMAPEdata = new FileWriter(mapeTesting50Monthly);
-            fileWriterTesting = new FileWriter(errortesting50DataMonthly);
-        } else if (dataset == 120) {
-            fileWriterMAPEdata = new FileWriter(mapeTesting120Monthly);
-            fileWriterTesting = new FileWriter(errortesting120DataMonthly);
-        }
-
-        double prediksi, targetTesting, percentageError, MAPE, totalError = 0, nilaiPrediksi = 0, percentage = 0;
-        //Write the Testing CSV file header
-        fileWriterTesting.append(FILE_HEADER);
-        //Add a new line separator after the header
-        fileWriterTesting.append(NEW_LINE_SEPARATOR);
-        
-        //Write the Training CSV file header
-        fileWriterMAPEdata.append(FILE_MAPE);
-        //Add a new line separator after the header
-        fileWriterMAPEdata.append(NEW_LINE_SEPARATOR_MAPE);
-        
-        for (int x = 0; x < target.size(); x++) {
-            id++;
-            totalData = target.size() - 1;
-//            System.out.println("Prediksi : " + sc.denormalizationDailyInput(dataset, dataPredict[x]));
-//            System.out.println("Target   : " + target.get(x));
-
-            prediksi = sc.denormalizationDailyInput(dataset, dataPredict[x]);
-            targetTesting = target.get(x);
-
-            if (x < totalData) {
-                percentageError = ((targetTesting - prediksi) / targetTesting) * 100;
-
-//                Absolute Value
-                if (percentageError < 0) {
-                    percentageError *= -1;
-                }
-
-                totalError += percentageError;
-                //Write a normalization output into CSV File
-//                For Column ID
-                fileWriterTesting.append(String.valueOf(id));
-                fileWriterTesting.append(COMMA_DELIMITER);
-                fileWriterTesting.append(String.valueOf(percentageError));
-                fileWriterTesting.append(NEW_LINE_SEPARATOR);
-
-//                System.out.println("Percentage Error : " + percentageError);
-//                System.out.println("Total Error : " + totalError + "\n");
-            }
-            if (x == totalData) {
-                nilaiPrediksi = sc.denormalizationDailyInput(dataset, dataPredict[x]);
-//                System.out.println("\nNilai Prediksi : " + nilaiPrediksi);
-            }
-        }
-//        System.out.println("Total Data : " + totalData);
-
-        MAPE = totalError / totalData;
-        fileWriterMAPEdata.append(String.valueOf(1));
-        fileWriterMAPEdata.append(COMMA_DELIMITER);
-        fileWriterMAPEdata.append(String.valueOf(MAPE));
-        fileWriterMAPEdata.append(NEW_LINE_SEPARATOR);
-        percentage = 100 - MAPE;
-        System.out.println("\nMAPE dari Keseluruhan Data Testing " + dataset + " Data adalah : " + MAPE + " , Dengan Akurasi : " +percentage+" %");
-        System.out.println("Nilai Prediksi " + dataset + " Data : " + nilaiPrediksi);
-        
-        fileWriterTesting.flush();
-        fileWriterTesting.close();
-        fileWriterMAPEdata.flush();
-        fileWriterMAPEdata.close();
-    }
+//    public void mapeDataTrainingMonthlySecond(List<Double> outputTraining, List<Double> targetTraining, int dataset) throws SQLException, IOException {
+//        int totalData = outputTraining.size(), id = 0;
+//        double trainingModel, targetTrainingModel, percentageError, MAPE, totalError = 0, percentage = 0;
+//        if (dataset == 10) {
+//            fileWriterMAPEdata = new FileWriter(mapeTraining10MonthlySecond);
+//            fileWriterTraining = new FileWriter(errortraining10DataMonthlySecond);
+//        } else if (dataset == 50) {
+//            fileWriterMAPEdata = new FileWriter(mapeTraining50MonthlySecond);
+//            fileWriterTraining = new FileWriter(errortraining50DataMonthlySecond);
+//        } else if (dataset == 120) {
+//            fileWriterMAPEdata = new FileWriter(mapeTraining120MonthlySecond);
+//            fileWriterTraining = new FileWriter(errortraining120DataMonthlySecond);
+//        }
+//
+//        //Write the Training CSV file header
+//        fileWriterTraining.append(FILE_HEADER);
+//        //Add a new line separator after the header
+//        fileWriterTraining.append(NEW_LINE_SEPARATOR);
+//        
+//        //Write the Training CSV file header
+//        fileWriterMAPEdata.append(FILE_MAPE);
+//        //Add a new line separator after the header
+//        fileWriterMAPEdata.append(NEW_LINE_SEPARATOR_MAPE);
+//        
+//        for (int x = 0; x < totalData; ++x) {
+//            id++;
+//            trainingModel = sc.denormalizationDailyInput(dataset, outputTraining.get(x));
+//            targetTrainingModel = targetTraining.get(x);
+//            percentageError = ((targetTrainingModel - trainingModel) / targetTrainingModel) * 100;
+//
+////                Absolute Value
+//            if (percentageError < 0) {
+//                percentageError *= -1;
+//            }
+//
+//            totalError += percentageError;
+////            System.out.println("Data Output : " + trainingModel + " , Target : " + targetTrainingModel);
+////            System.out.println("\nPercentage Error : " + percentageError);
+//
+//            //Write a normalization output into CSV File
+////                For Column ID
+//            fileWriterTraining.append(String.valueOf(id));
+//            fileWriterTraining.append(COMMA_DELIMITER);
+//            fileWriterTraining.append(String.valueOf(percentageError));
+//            fileWriterTraining.append(NEW_LINE_SEPARATOR);
+//        }
+//
+//        MAPE = totalError / totalData;
+//        percentage = 100 - MAPE;
+////        System.out.println("Total Error : "+totalError);
+////        System.out.println("Total Data : "+totalData);
+//        fileWriterMAPEdata.append(String.valueOf(1));
+//        fileWriterMAPEdata.append(COMMA_DELIMITER);
+//        fileWriterMAPEdata.append(String.valueOf(MAPE));
+//        fileWriterMAPEdata.append(NEW_LINE_SEPARATOR);
+//        System.out.println("\nNilai MAPE dari Keseluruhan Data Training " + dataset + " Data : " + MAPE + ", Dengan Akurasi : "+percentage+" %");
+//        
+//        fileWriterMAPEdata.flush();
+//        fileWriterMAPEdata.close();
+//        fileWriterTraining.flush();
+//        fileWriterTraining.close();
+//    }
+//    
+//    public void mapeDataTestingMonthlySecond(double[] dataPredict, List<Double> target, int dataset) throws SQLException, IOException {
+//        int totalData = 0, id = 0;
+//        if (dataset == 10) {
+//            fileWriterMAPEdata = new FileWriter(mapeTesting10Monthly);
+//            fileWriterTesting = new FileWriter(errortesting10DataMonthly);
+//        } else if (dataset == 50) {
+//            fileWriterMAPEdata = new FileWriter(mapeTesting50Monthly);
+//            fileWriterTesting = new FileWriter(errortesting50DataMonthly);
+//        } else if (dataset == 120) {
+//            fileWriterMAPEdata = new FileWriter(mapeTesting120Monthly);
+//            fileWriterTesting = new FileWriter(errortesting120DataMonthly);
+//        }
+//
+//        double prediksi, targetTesting, percentageError, MAPE, totalError = 0, nilaiPrediksi = 0, percentage = 0;
+//        //Write the Testing CSV file header
+//        fileWriterTesting.append(FILE_HEADER);
+//        //Add a new line separator after the header
+//        fileWriterTesting.append(NEW_LINE_SEPARATOR);
+//        
+//        //Write the Training CSV file header
+//        fileWriterMAPEdata.append(FILE_MAPE);
+//        //Add a new line separator after the header
+//        fileWriterMAPEdata.append(NEW_LINE_SEPARATOR_MAPE);
+//        
+//        for (int x = 0; x < target.size(); x++) {
+//            id++;
+//            totalData = target.size() - 1;
+////            System.out.println("Prediksi : " + sc.denormalizationDailyInput(dataset, dataPredict[x]));
+////            System.out.println("Target   : " + target.get(x));
+//
+//            prediksi = sc.denormalizationDailyInput(dataset, dataPredict[x]);
+//            targetTesting = target.get(x);
+//
+//            if (x < totalData) {
+//                percentageError = ((targetTesting - prediksi) / targetTesting) * 100;
+//
+////                Absolute Value
+//                if (percentageError < 0) {
+//                    percentageError *= -1;
+//                }
+//
+//                totalError += percentageError;
+//                //Write a normalization output into CSV File
+////                For Column ID
+//                fileWriterTesting.append(String.valueOf(id));
+//                fileWriterTesting.append(COMMA_DELIMITER);
+//                fileWriterTesting.append(String.valueOf(percentageError));
+//                fileWriterTesting.append(NEW_LINE_SEPARATOR);
+//
+////                System.out.println("Percentage Error : " + percentageError);
+////                System.out.println("Total Error : " + totalError + "\n");
+//            }
+//            if (x == totalData) {
+//                nilaiPrediksi = sc.denormalizationDailyInput(dataset, dataPredict[x]);
+////                System.out.println("\nNilai Prediksi : " + nilaiPrediksi);
+//            }
+//        }
+////        System.out.println("Total Data : " + totalData);
+//
+//        MAPE = totalError / totalData;
+//        fileWriterMAPEdata.append(String.valueOf(1));
+//        fileWriterMAPEdata.append(COMMA_DELIMITER);
+//        fileWriterMAPEdata.append(String.valueOf(MAPE));
+//        fileWriterMAPEdata.append(NEW_LINE_SEPARATOR);
+//        percentage = 100 - MAPE;
+//        System.out.println("\nMAPE dari Keseluruhan Data Testing " + dataset + " Data adalah : " + MAPE + " , Dengan Akurasi : " +percentage+" %");
+//        System.out.println("Nilai Prediksi " + dataset + " Data : " + nilaiPrediksi);
+//        
+//        fileWriterTesting.flush();
+//        fileWriterTesting.close();
+//        fileWriterMAPEdata.flush();
+//        fileWriterMAPEdata.close();
+//    }
 }

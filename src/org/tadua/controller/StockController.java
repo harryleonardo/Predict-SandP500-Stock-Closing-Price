@@ -1741,7 +1741,7 @@ public class StockController {
             double targets = datas.getTarget();
             if (dataset == 10) {
                 if (counter <= 8) {
-                    System.out.println(targets);
+//                    System.out.println(targets);
                     targetMonthlyTraining.add(targets);
                 }
             } else if (dataset == 50) {
@@ -1842,7 +1842,7 @@ public class StockController {
 //            System.out.println("Targets : " + targets);
             if (dataset == 10) {
                 if (counter > 8) {
-                    System.out.println(targets);
+//                    System.out.println(targets);
                     targetMonthlyTesting.add(targets);
                 }
             } else if (dataset == 50) {
@@ -2444,9 +2444,5 @@ public class StockController {
         }
     }
     
-    public static void main(String[] args) throws SQLException,IOException{
-        StockController controller = new StockController();
-        controller.prosesData(10);
-    }
 }
 //}

@@ -83,7 +83,7 @@ public class PrediksibulananController implements Initializable {
             hasil = sc.denormalizationMonthlyInput(x,y,z, predict);
             
             dates = pc.getLastDateMonthly(x,y,z);
-            System.out.println("Dates : "+dates);
+//            System.out.println("Dates : "+dates);
             datas = pc.getDataMonthly(x,y,z);
             currentDate = pbc.getCurrentDate(x,y,z);
             
@@ -102,9 +102,9 @@ public class PrediksibulananController implements Initializable {
             bulanSebelum.setText(""+tmpBulanSeb+" "+yearSeb);
             
             Data curData = pbc.getSingleData(x,y,z);
-            System.out.println(curData);
+//            System.out.println(curData);
             
-            System.out.println("Current Date :"+currentDate);
+//            System.out.println("Current Date :"+currentDate);
             
             year = cal.get(Calendar.YEAR);
             month = cal.get(Calendar.MONTH);
@@ -112,7 +112,7 @@ public class PrediksibulananController implements Initializable {
             tmpBulan = pc.bulan(monthReal);
             day = cal.get(Calendar.DAY_OF_MONTH);
             
-            System.out.println("Day :"+day+" ; Month : "+monthReal+" ; Bulan : "+tmpBulan);
+//            System.out.println("Day :"+day+" ; Month : "+monthReal+" ; Bulan : "+tmpBulan);
 //            Set Tanggal Data yang sedang digunakan untuk memprediksi
             tanggalSekarang.setText(""+day);
             bulanSekarang.setText(""+tmpBulan+" "+year);

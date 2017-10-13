@@ -36,23 +36,23 @@ public class Main {
     public static void main(String[] args) throws SQLException, IOException, RserveException, REXPMismatchException {
 //        Controller that want to be used
         //        GUI From FX
-        launch(Finance.class, args);
+//        launch(Finance.class, args);
 
-//        int month=0;
-//        StockController sc = new StockController();
-//        TrainingController tc = new TrainingController();
-//        HandleErrorController hec = new HandleErrorController();
-//        ProsesBulananController bulananController = new ProsesBulananController();
-//        BulananBerurutController bbc = new BulananBerurutController();
-//        RConnection connection = null;
-//        connection = new RConnection();
+        int month=0;
+        StockController sc = new StockController();
+        TrainingController tc = new TrainingController();
+        HandleErrorController hec = new HandleErrorController();
+        ProsesBulananController bulananController = new ProsesBulananController();
+        BulananBerurutController bbc = new BulananBerurutController();
+        RConnection connection = null;
+        connection = new RConnection();
 ////
 //////        connection.eval("source('D:\\\\Kuliah\\\\Semester V\\\\TA\\\\Implementasi\\\\R\\\\neuralNet.R')");
-//        connection.eval("source('D:\\\\Kuliah\\\\Semester VI\\\\TAII\\\\ImplementasiTAII\\\\neuralNetDataSet.R')");
-//////        connection.eval("source('D:\\\\Kuliah\\\\Semester VI\\\\TAII\\\\ImplementasiTAII\\\\neuralNet.R')");
+        connection.eval("source('D:\\\\Kuliah\\\\Semester VI\\\\TAII\\\\ImplementasiTAII\\\\neuralNetDataSet.R')");
+//        connection.eval("source('D:\\\\Kuliah\\\\Semester VI\\\\TAII\\\\ImplementasiTAII\\\\neuralNet.R')");
 ////
 //        int totalData = 0;
-//        double[] predict10DataDaily,predict50DataDaily,predict100DataDaily, predict500DataDaily, predict2500DataDaily;
+        double[] predict10DataDaily,predict50DataDaily,predict100DataDaily, predict500DataDaily, predict2500DataDaily;
 //        double[] predict10DataMonthly,predict50DataMonthly,predict120DataMonthly;
 //        double target, prediksi, percentageError, MAPE, totalError = 0;
         /*
@@ -62,7 +62,7 @@ public class Main {
 //        sc.proses50Data(50);
 //        sc.proses100Data(100);
 //        sc.proses500Data(500);
-//        sc.proses2500Data(2500);
+        sc.proses2500Data(2500);
 
         /*
             Process each of monthly dataset into CSV file
@@ -79,7 +79,7 @@ public class Main {
         /*
             Getting DataFrame Training that has been passed from R Language
          */
-//        predict10DataDaily = (double[]) connection.eval("neuralNet10()").asDoubles();
+        predict10DataDaily = (double[]) connection.eval("neuralNet10()").asDoubles();
 //        predict50DataDaily = (double[]) connection.eval("neuralNet50()").asDoubles();
 //        predict100DataDaily = (double[]) connection.eval("neuralNet100()").asDoubles();
 //        predict500DataDaily = (double[]) connection.eval("neuralNet500()").asDoubles();
@@ -99,7 +99,7 @@ public class Main {
 //        /*
 //            Retrieve Target data Training Daily
 //        */
-//        List<Double> targetTraining10DataDaily = sc.targetDataTrainingDaily(10);
+        List<Double> targetTraining10DataDaily = sc.targetDataTrainingDaily(10);
 //        List<Double> targetTraining50DataDaily = sc.targetDataTrainingDaily(50);
 //        List<Double> targetTraining100DataDaily = sc.targetDataTrainingDaily(100);
 //        List<Double> targetTraining500DataDaily = sc.targetDataTrainingDaily(500);
@@ -108,7 +108,7 @@ public class Main {
 //        /*
 //            Retrieve Target data Testing value of each data
 //         */
-//        List<Double> targetTesting10DataDaily = sc.targetDataTestingDaily(10);
+        List<Double> targetTesting10DataDaily = sc.targetDataTestingDaily(10);
 //        List<Double> targetTesting50DataDaily = sc.targetDataTestingDaily(50);
 //        List<Double> targetTesting100DataDaily = sc.targetDataTestingDaily(100);
 //        List<Double> targetTesting500DataDaily = sc.targetDataTestingDaily(500);
@@ -141,7 +141,7 @@ public class Main {
             This function to retrieve Output from Training Model Daily that has been saved in 
             CSV file into current directory path
          */
-//        List<Double> trainingModel10DataDaily = tc.Modelfor10DataDaily();
+        List<Double> trainingModel10DataDaily = tc.Modelfor10DataDaily();
 //        List<Double> trainingModel50DataDaily = tc.Modelfor50DataDaily();
 //        List<Double> trainingModel100DataDaily = tc.Modelfor100DataDaily();
 //        List<Double> trainingModel500DataDaily = tc.Modelfor500DataDaily();
@@ -163,7 +163,7 @@ public class Main {
 //        /*
 //            This function is use to calculate MAPE of training Data
 //        */
-//        hec.mapeDataTrainingDaily(trainingModel10DataDaily, targetTraining10DataDaily,10);
+        hec.mapeDataTrainingDaily(trainingModel10DataDaily, targetTraining10DataDaily,10);
 //        hec.mapeDataTrainingDaily(trainingModel50DataDaily, targetTraining50DataDaily,50);
 //        hec.mapeDataTrainingDaily(trainingModel100DataDaily, targetTraining100DataDaily,100);
 //        hec.mapeDataTrainingDaily(trainingModel500DataDaily, targetTraining500DataDaily,500);
@@ -173,7 +173,7 @@ public class Main {
 //            Call this function to give output of total percentage error of each data set
 //            Using MAPE function to calculate the error
 //        */
-//        hec.mapeDataTestingDaily(predict10DataDaily, targetTesting10DataDaily,10);
+        hec.mapeDataTestingDaily(predict10DataDaily, targetTesting10DataDaily,10);
 //        hec.mapeDataTestingDaily(predict50DataDaily, targetTesting50DataDaily,50);
 //        hec.mapeDataTestingDaily(predict100DataDaily, targetTesting100DataDaily,100);
 //        hec.mapeDataTestingDaily(predict500DataDaily, targetTesting500DataDaily,500);
