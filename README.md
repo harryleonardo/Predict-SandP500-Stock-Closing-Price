@@ -25,18 +25,27 @@ So basically, this app was build using:
     
 ## Images
 * Architecture Design of ANN on this repository
+
     ![Image of Chart](./docs/architecture.png)
 
 * Sample of Daily Prediction GUI
+
     ![Image of Chart](./docs/dailyUI-prediction.png)
 
 * Graphic of Experiment Result for few days
+
     ![Image of Chart](./docs/graph-experiment-result.png)
 
 * Table of Experiment Result for few days
+
     ![Image of Chart](./docs/table-experiment-result.png)
 
 
+## Conclusions
+After doing some experiment, we explain the conclusions and suggestions of the final work done. Here are the conclusions:
+1. The prototype applied dynamic data set at 10, 50, 100, 500 past data selection so as to generate the best S&P500 stock predictions with MAPE criteria.
+
+2. The daily prediction result of the S&P 500 stock price using implementation ANN by our prototype is good with the average MAPE prediction for a month is 0.2307 and the average accuracy is 99.77%.
 
 ## Reference
 For more information, here is the [journal of this experiment](https://doi.org/10.1088/1742-6596/1175/1/012107).
